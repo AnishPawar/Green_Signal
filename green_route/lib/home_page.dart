@@ -24,7 +24,8 @@ class HomePage extends StatelessWidget {
               if (provider.isSigningIn) {
                 return buildLoading();
               } else if (snapshot.hasData) {
-                return MainMap();
+                // return MainMap();
+                return BishList();
               } else {
                 return SignUpPage();
               }

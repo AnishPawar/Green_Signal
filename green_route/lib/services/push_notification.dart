@@ -31,7 +31,9 @@ class PushNotificationsManager {
       );
 
       token = await _firebaseMessaging.getToken();
-      // print("token: $token");
+      _firebaseMessaging.subscribeToTopic('news');
+      print("token: $token");
+      //
       _initialized = true;
       return token;
     }

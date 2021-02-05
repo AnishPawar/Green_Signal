@@ -19,6 +19,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:green_route/services/database.dart';
+import 'package:green_route/services/Node_identify.dart';
 
 double latitude = 19.079790;
 double longitude = 72.904050;
@@ -102,7 +103,8 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
                 style: TextStyle(color: Colors.red),
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
+                Navigator.pushNamed(context, NodeIdentify.id);
               },
             ),
             CupertinoDialogAction(

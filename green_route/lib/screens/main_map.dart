@@ -196,21 +196,6 @@ class _MainMapState extends State<MainMap> {
               ),
             ),
           ),
-          // Positioned(
-          //   width: 60,
-          //   height: 60,
-          //   bottom: 30,
-          //   left: 17,
-          //   child: RoundButton(
-          //     btn_color: Colors.blue,
-          //     onPressed: () {},
-          //     btn_icon: Icon(
-          //       Icons.directions,
-          //       color: Colors.white,
-          //       size: 30,
-          //     ),
-          //   ),
-          // ),
           Positioned(
             width: 60,
             height: 60,
@@ -268,22 +253,6 @@ class _MainMapState extends State<MainMap> {
               ),
               title: Text('For Ambulance'),
               onTap: () {
-                // List pt_1 = [
-                //   (pi / 180) * (19.134061),
-                //   (pi / 180) * (72.910901)
-                // ];
-                // List pt_2 = [
-                //   (pi / 180) * (19.126275438939253),
-                //   (pi / 180) * (72.91820117092337)
-                // ];
-                // List user_pt = [
-                //   (pi / 180) * (19.15300),
-                //   (pi / 180) * (72.910901)
-                // ];
-
-                // bool new_1 = pathMatching(pt_1, pt_2, user_pt);
-                // print(new_1);
-
                 Navigator.pushNamed(context, AmbulanceSignUp.id);
               },
             ),
