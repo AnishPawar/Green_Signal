@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => AppData(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: HomePage(),
         // initialRoute: HomePage.id,
         routes: {
