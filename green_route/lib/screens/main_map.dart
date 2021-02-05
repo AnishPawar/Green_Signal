@@ -24,6 +24,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:green_route/services/database.dart';
 import 'package:green_route/services/location.dart';
 import 'package:green_route/services/push_notification.dart';
+// import 'package:green_route/models/ambulance_class.dart';
 
 double latitude = 19.079790;
 double longitude = 72.904050;
@@ -299,6 +300,7 @@ class _MainMapState extends State<MainMap> {
     PolylinePoints polylinePoints = PolylinePoints();
     List<PointLatLng> results =
         polylinePoints.decodePolyline(thisDetails.encodedPoints);
+    // print(results);
     polylineCoordinates.clear();
     if (results.isNotEmpty) {
       results.forEach((PointLatLng point) {

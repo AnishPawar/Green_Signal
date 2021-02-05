@@ -341,6 +341,7 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
     PolylinePoints polylinePoints = PolylinePoints();
     List<PointLatLng> results =
         polylinePoints.decodePolyline(thisDetails.encodedPoints);
+    getPathPoints(results);
     polylineCoordinates.clear();
     if (results.isNotEmpty) {
       results.forEach((PointLatLng point) {

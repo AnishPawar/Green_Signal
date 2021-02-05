@@ -6,10 +6,14 @@ import 'package:green_route/services/database.dart';
 import 'dart:convert';
 
 dynamic location;
+dynamic pathList;
 
 void getLocationHelper(dynamic current_location) {
-  // return location;
   location = current_location;
+}
+
+void getPathPoints(dynamic pathPointList) {
+  pathList = pathPointList;
 }
 
 class Ambulance_Model {
@@ -19,6 +23,8 @@ class Ambulance_Model {
   double amb_longitude;
   void printLocations() {
     getData();
+    dynamic test = pathList[0];
+    print("Path List is:$test");
   }
 
   Future<List> getData() async {
