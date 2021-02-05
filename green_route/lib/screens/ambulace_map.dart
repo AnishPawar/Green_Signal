@@ -20,6 +20,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:green_route/services/database.dart';
 import 'package:green_route/services/Node_identify.dart';
+import 'package:green_route/models/ambulance_class.dart';
 
 double latitude = 19.079790;
 double longitude = 72.904050;
@@ -66,6 +67,8 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.bestForNavigation);
     currentPosition = position;
+
+    getLocationHelper(position);
 
     LatLng pos = LatLng(position.latitude, position.longitude);
     CameraPosition cp = new CameraPosition(target: pos, zoom: 14);
