@@ -1,6 +1,7 @@
 import 'package:green_route/buttons/floating_searchbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:green_route/services/BishList.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:green_route/buttons/round_button.dart';
 import 'package:green_route/provider/google_signin.dart';
@@ -282,6 +283,11 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
                 setState(() {
                   if (i < polylineCoordinates.length) {
                     pos = polylineCoordinates[i];
+                    double current_lat = pos.latitude;
+                    double current_long = pos.longitude;
+                    DatabaseService(uid: uid)
+                        .updateAmbulanceData(current_lat, current_long, [], []);
+
                     i++;
                     print(pos);
                     print("I = $i");

@@ -1,11 +1,17 @@
+import 'dart:developer';
+// import 'dart:js';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:audioplayers/audio_cache.dart';
+import 'package:flutter/material.dart';
 
 String token = '';
 
-void playsound() {
+int counter = 1;
+
+void playsound(int audio_number) {
   final player = AudioCache();
-  player.play("Amb_1.wav");
+  player.play("Amb_$audio_number.wav");
 }
 
 class PushNotificationsManager {
@@ -26,16 +32,44 @@ class PushNotificationsManager {
       _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
           print("onMessage: $message");
-          playsound();
+          // AlertDialog(
+          //   title: Text("Please Make way for Ambulance"),
+          //   content: Text("Blah Blah Blah"),
+          //   actions: [
+          //     FlatButton(
+          //       child: Text("Ok"),
+          //       onPressed: () {
+          //         // Navigator.of(context).pop();
+          //       },
+          //     )
+          //   ],
+          // );
+          playsound(counter);
+          if (counter <= 2) {
+            counter++;
+          } else {
+            counter = 1;
+          }
+
           // _showItemDialog(message);
         },
         onLaunch: (Map<String, dynamic> message) async {
           print("onLaunch: $message");
-          playsound();
+          playsound(counter);
+          if (counter <= 2) {
+            counter++;
+          } else {
+            counter = 1;
+          }
         },
         onResume: (Map<String, dynamic> message) async {
           print("onResume: $message");
-          playsound();
+          playsound(counter);
+          if (counter <= 2) {
+            counter++;
+          } else {
+            counter = 1;
+          }
         },
       );
 
