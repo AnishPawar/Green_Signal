@@ -54,7 +54,7 @@ dependencies:
   brand_colors: ^0.0.3
   flutter_polyline_points: ^0.2.4
   firebase_messaging: 
-
+  flutter_animarker: ^0.1.1+1
 
 dev_dependencies:
   flutter_test:
