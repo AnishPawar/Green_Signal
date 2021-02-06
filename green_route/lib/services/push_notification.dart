@@ -51,7 +51,7 @@ class PushNotificationsManager {
           if (counter <= 2) {
             counter++;
           } else {
-            counter = 1;
+            counter = 0;
           }
 
           // _showItemDialog(message);
@@ -62,7 +62,7 @@ class PushNotificationsManager {
           if (counter <= 2) {
             counter++;
           } else {
-            counter = 1;
+            counter = 0;
           }
         },
         onResume: (Map<String, dynamic> message) async {
@@ -71,7 +71,7 @@ class PushNotificationsManager {
           if (counter <= 2) {
             counter++;
           } else {
-            counter = 1;
+            counter = 0;
           }
         },
       );
