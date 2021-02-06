@@ -124,31 +124,37 @@ exports.ambulanceNotifier = functions.firestore.document(
 						b= Math.abs(user_long - amb_longitude);
 
 						dist = Math.sqrt((a*a)+(b*b));
-						console.log("DIstance is");
-						console.log(dist);
-						// console.log(user_long);
+						// console.log("DIstance is");
+						// console.log(dist);
+						if (dist <= 0.01) {
+
+							admin.firestore().collection("User_Token").doc(temp_uid).get().then((snapshots) => {
+								newMessage = snapshots.data();
+								newTokens.push(newMessage.Token_Value);
+							})
+						}
 					}
 				}
 				
 			}
-			// var message = {
-			// 	notification:{title:"Ambulance!",
-			// 	body:"An Ambulance is coming your way.Please clear the path"},
-			// 	data: {
-			// 	  score: '850',
-			// 	  time: '2:45'
-			// 	},
-			// 	tokens: newTokens,	
-			//   };
+			var message = {
+				notification:{title:"Ambulance!",
+				body:"An Ambulance is coming your way.Please clear the path"},
+				data: {
+				  score: '850',
+				  time: '2:45'
+				},
+				tokens: newTokens,	
+			  };
 
-			// admin.messaging().sendMulticast(message)
-			// .then((response) => {
-			// 	// Response is a message ID string.
-			// 	console.log('Successfully sent message:', response);
-			// })
-			// .catch((error) => {
-			// 	console.log('Error sending message:', error);
-			// });	
+			admin.messaging().sendMulticast(message)
+			.then((response) => {
+				// Response is a message ID string.
+				console.log('Successfully sent message:', response);
+			})
+			.catch((error) => {
+				console.log('Error sending message:', error);
+			});	
 		}
 
 	})
