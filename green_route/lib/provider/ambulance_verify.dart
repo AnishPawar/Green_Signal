@@ -56,7 +56,7 @@ class _LandingScreenState extends State<LandingScreen> {
                     child: Row(
                       children: [
                         Icon(
-                          Icons.camera,
+                          Icons.camera_alt,
                           size: 35.0,
                         ),
                         SizedBox(
@@ -151,7 +151,7 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F4F4),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Center(child: Text("IDENTITY AUTENCATION")),
         backgroundColor: const Color(0xFF0A043C),
@@ -164,7 +164,7 @@ class _LandingScreenState extends State<LandingScreen> {
               children: [
                 Expanded(
                   child: Center(child: _decideImageView()),
-                  flex: 4,
+                  flex: 6,
                 ),
                 Expanded(
                   child: SimpleRoundButton(
