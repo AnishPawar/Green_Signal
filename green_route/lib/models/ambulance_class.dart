@@ -6,14 +6,21 @@ import 'package:green_route/services/database.dart';
 import 'dart:convert';
 
 dynamic location;
-dynamic pathList;
+List pathList = [];
 
 void getLocationHelper(dynamic current_location) {
   location = current_location;
 }
 
 void getPathPoints(dynamic pathPointList) {
-  pathList = pathPointList;
+  //pathList = pathPointList;
+  for (var i = 0; i < pathPointList.length; i++) {
+    //print(pathPointList);
+    pathList.add({
+      "Latitude": pathPointList[i].latitude,
+      "Longitude": pathPointList[i].longitude
+    });
+  }
 }
 
 class Ambulance_Model {
@@ -23,8 +30,8 @@ class Ambulance_Model {
   double amb_longitude;
   void printLocations() {
     getData();
-    dynamic test = pathList[0];
-    print("Path List is:$test");
+    //dynamic test = pathList[0].latitude;
+    print("Path List is:$pathList");
   }
 
   Future<List> getData() async {
@@ -39,21 +46,21 @@ class Ambulance_Model {
 
     bool pathCheck = false;
 
-    List pathPoints = [
-      {"Latitude": 19.07979, "Longitude": 72.90551},
-      {"Latitude": 19.17979, "Longitude": 72.91551}
-    ];
+    // List pathPoints = [
+    //   {"Latitude": 19.07979, "Longitude": 72.90551},
+    //   {"Latitude": 19.17979, "Longitude": 72.91551}
+    // ];
 
     List tempChildNodes = [];
     print(result);
     print(result.length);
     for (var i = 0; i < result.length; i++) {
       counter += 1;
-      for (var j = 0; j < pathPoints.length - 1; j++) {
+      for (var j = 0; j < pathList.length - 1; j++) {
         print(j);
         pathCheck = preprocess(
-            [pathPoints[j]["Latitude"], pathPoints[j]["Longitude"]],
-            [pathPoints[j + 1]["Latitude"], pathPoints[j + 1]["Longitude"]],
+            [pathList[j]["Latitude"], pathList[j]["Longitude"]],
+            [pathList[j + 1]["Latitude"], pathList[j + 1]["Longitude"]],
             [result[i][1], result[i][2]]);
       }
       print("Is the user in path? $pathCheck of $counter");
@@ -62,6 +69,6 @@ class Ambulance_Model {
       }
     }
     DatabaseService(uid: uid).updateAmbulanceData(
-        location.latitude, location.longitude, pathPoints, tempChildNodes);
+        location.latitude, location.longitude, pathList, tempChildNodes);
   }
 }
