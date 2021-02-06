@@ -344,7 +344,14 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
                 setState(() {
                   pos = polylineCoordinates[i];
                   i++;
+                  print(pos);
                   print("I = $i");
+                  Marker newCar = Marker(
+                      markerId: MarkerId('bus'),
+                      position: pos,
+                      icon: BitmapDescriptor.defaultMarkerWithHue(
+                          BitmapDescriptor.hueRose));
+                  _markers.add(newCar);
                 });
               },
               btn_icon: Icon(
