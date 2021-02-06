@@ -118,7 +118,7 @@ class _LandingScreenState extends State<LandingScreen> {
       final FirebaseAuth auth = FirebaseAuth.instance;
       final User user = auth.currentUser;
       final uid = user.uid;
-      await DatabaseService(uid: uid).updateUserData(true, 0.000, 0.0000);
+      await DatabaseService(uid: uid).updateUserData(true, 0.000, 0.0000, '');
       Navigator.pushNamed(context, AmbulanceMap.id);
     } else {
       print("Hospital Not Found");

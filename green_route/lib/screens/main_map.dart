@@ -45,8 +45,8 @@ class _MainMapState extends State<MainMap> {
     final uid = usert.uid;
 
     String token = await pushNotificationService.init();
-    DatabaseService(uid: uid).updateUserToken(token);
-
+    // DatabaseService(uid: uid).updateUserToken(token);
+    DatabaseService(uid: uid).updateUserData(false, latitude, longitude, token);
     return token;
   }
 
@@ -57,8 +57,6 @@ class _MainMapState extends State<MainMap> {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
     final uid = user.uid;
-    DatabaseService(uid: uid).updateUserData(false, latitude, longitude);
-
     notificationCall();
   }
 

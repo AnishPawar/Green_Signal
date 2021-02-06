@@ -14,12 +14,13 @@ class DatabaseService {
   final CollectionReference userTokens =
       FirebaseFirestore.instance.collection('User_Token');
 
-  Future<void> updateUserData(
-      bool ambulance, double latitude, double longitude) async {
+  Future<void> updateUserData(bool ambulance, double latitude, double longitude,
+      String usertoken) async {
     return await collectme.doc(uid).set({
       'Ambulance': ambulance,
       'Current_Latitude': latitude,
       'Current_Longitude': longitude,
+      'User_Token': usertoken
     });
   }
 

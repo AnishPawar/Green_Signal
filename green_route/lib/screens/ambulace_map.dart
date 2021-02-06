@@ -39,7 +39,7 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
     final uid = user.uid;
-    DatabaseService(uid: uid).updateUserData(true, latitude, longitude);
+    DatabaseService(uid: uid).updateUserData(true, latitude, longitude, '');
   }
 
   void getCurrentLocation() async {
