@@ -1,6 +1,6 @@
 import 'dart:math';
 
-int counter = 10;
+int counter = 100;
 
 bool preprocess(List start, List end, List user) {
   List start_new = [(pi / 180) * (start[0]), (pi / 180) * (start[1])];
@@ -34,12 +34,12 @@ bool pathMatching(double start_coord, double end_coord, double user_coord) {
   counter--;
   if (((absabs(user_coord, start_coord) <= 0.0001) &
       (absabs(user_coord, start_coord) <= 0.0001))) {
-    counter = 10;
+    counter = 100;
     return true;
   }
 
   if (counter == 0) {
-    counter = 10;
+    counter = 100;
     return false;
   }
 

@@ -33,6 +33,7 @@ class NodeIdentify extends StatelessWidget {
 
             if (userList.length != 0) {
               print("that");
+              print(userList);
               Ambulance_Model(userLocations: userList).printLocations();
             }
             // Navigator.pop(context);

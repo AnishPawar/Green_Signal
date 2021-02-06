@@ -31,7 +31,7 @@ class Ambulance_Model {
   void printLocations() {
     getData();
     //dynamic test = pathList[0].latitude;
-    print("Path List is:$pathList");
+    // print("Path List is:$pathList");
   }
 
   Future<List> getData() async {
@@ -52,7 +52,7 @@ class Ambulance_Model {
     // ];
 
     List tempChildNodes = [];
-    print(result);
+    print(pathList);
     print(result.length);
     for (var i = 0; i < result.length; i++) {
       counter += 1;
@@ -62,6 +62,9 @@ class Ambulance_Model {
             [pathList[j]["Latitude"], pathList[j]["Longitude"]],
             [pathList[j + 1]["Latitude"], pathList[j + 1]["Longitude"]],
             [result[i][1], result[i][2]]);
+        if (pathCheck) {
+          break;
+        }
       }
       print("Is the user in path? $pathCheck of $counter");
       if (pathCheck) {
