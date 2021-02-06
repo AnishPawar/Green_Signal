@@ -1,6 +1,12 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:audioplayers/audio_cache.dart';
 
 String token = '';
+
+void playsound() {
+  final player = AudioCache();
+  player.play("Amb_1.wav");
+}
 
 class PushNotificationsManager {
   PushNotificationsManager._();
@@ -20,13 +26,16 @@ class PushNotificationsManager {
       _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
           print("onMessage: $message");
+          playsound();
           // _showItemDialog(message);
         },
         onLaunch: (Map<String, dynamic> message) async {
           print("onLaunch: $message");
+          playsound();
         },
         onResume: (Map<String, dynamic> message) async {
           print("onResume: $message");
+          playsound();
         },
       );
 
