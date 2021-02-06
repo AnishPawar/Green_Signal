@@ -1,3 +1,5 @@
+import 'package:flutter_animarker/lat_lng_interpolation.dart';
+import 'package:flutter_animarker/models/lat_lng_delta.dart';
 import 'package:green_route/buttons/floating_searchbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,15 +31,58 @@ class AmbulanceMap extends StatefulWidget {
   _AmbulanceMapState createState() => _AmbulanceMapState();
 }
 
+// final startPosition = LatLng(18.488213, -69.959186);
+
+// //Run over the polygon position
+// final polygon = <LatLng>[
+//   startPosition,
+//   LatLng(18.489338, -69.947091),
+//   LatLng(18.495351, -69.949366),
+//   LatLng(18.497477, -69.947596),
+//   LatLng(18.498932, -69.948615),
+//   LatLng(18.498373, -69.958779),
+//   LatLng(18.488600, -69.959574),
+// ];
+
 class _AmbulanceMapState extends State<AmbulanceMap> {
+  int i = 0;
   void initState() {
     super.initState();
-    getCurrentLocation();
+    // getCurrentLocation();
 
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
     final uid = user.uid;
     DatabaseService(uid: uid).updateUserData(true, latitude, longitude);
+
+    // subscription =
+    //     _latLngStream.getLatLngInterpolation().listen((LatLngDelta delta) {
+    //   LatLng from = delta.from;
+    //   print("To: -> ${from.toJson()}");
+    //   LatLng to = delta.to;
+    //   print("From: -> ${to.toJson()}");
+    //   double angle = delta.rotation;
+    //   print("Angle: -> $angle");
+    //   //Update the animated marker
+    //   setState(() {
+    //     Marker sourceMarker = Marker(
+    //       markerId: sourceId,
+    //       rotation: delta.rotation,
+    //       position: LatLng(
+    //         delta.from.latitude,
+    //         delta.from.longitude,
+    //       ),
+    //     );
+    //     _markers[sourceId] = sourceMarker;
+    //   });
+
+    //   if (polygon.isNotEmpty) {
+    //     //Pop the last position
+    //     _latLngStream.addLatLng(polygon.removeLast());
+    //   }
+    // });
+
+    // super.initState();
   }
 
   void getCurrentLocation() async {
@@ -53,12 +98,17 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
   GoogleMapController newGoogleMapController;
   double mapBottomPadding = 0;
 
+  LatLngInterpolationStream _latLngStream =
+      LatLngInterpolationStream(movementDuration: Duration(seconds: 5));
+  StreamSubscription<LatLngDelta> subscription;
+
   List<LatLng> polylineCoordinates = [];
   Set<Polyline> _polylines = {};
   Set<Marker> _markers = {};
   Set<Circle> _circles = {};
 
   Position currentPosition;
+  LatLng pos;
   var geolocator = Geolocator();
 
   void setupPositionLocator() async {
@@ -66,7 +116,7 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
         desiredAccuracy: LocationAccuracy.bestForNavigation);
     currentPosition = position;
 
-    LatLng pos = LatLng(position.latitude, position.longitude);
+    pos = LatLng(position.latitude, position.longitude);
     CameraPosition cp = new CameraPosition(target: pos, zoom: 14);
     newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(cp));
     String address =
@@ -79,12 +129,10 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
     zoom: 14.4746,
   );
 
-  static final CameraPosition _currentpos = CameraPosition(
-    bearing: 192.8334901395799,
-    target: LatLng(latitude, longitude),
-    tilt: 59.440717697143555,
-    zoom: 19.151926040649414,
-  );
+  // final CameraPosition _kSantoDomingo = CameraPosition(
+  //   target: startPosition,
+  //   zoom: 15,
+  // );
 
   Future<void> _handleClickMe() async {
     return showDialog<void>(
@@ -122,6 +170,15 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
 
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
+  // final Map<MarkerId, Marker> _markers = Map<MarkerId, Marker>();
+  // MarkerId sourceId = MarkerId("SourcePin");
+
+  // @override
+  // void dispose() {
+  //   subscription.cancel();
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,6 +189,8 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
         children: [
           GoogleMap(
             mapType: MapType.normal,
+            // initialCameraPosition: _kGooglePlex,
+            // markers: Set<Marker>.of(_markers.values),
             initialCameraPosition: _kGooglePlex,
             myLocationButtonEnabled: false,
             myLocationEnabled: true,
@@ -144,6 +203,20 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
               _controller.complete(controller);
               newGoogleMapController = controller;
               setupPositionLocator();
+
+              // setState(() {
+              //   Marker sourceMarker = Marker(
+              //     markerId: sourceId,
+              //     position: startPosition,
+              //   );
+              //   _markers[sourceId] = sourceMarker;
+              // });
+
+              // _latLngStream.addLatLng(startPosition);
+              // //Add second position to start position over
+              // Future.delayed(const Duration(milliseconds: 3000), () {
+              //   _latLngStream.addLatLng(polygon.removeLast());
+              // });
             },
           ),
           Column(
@@ -257,6 +330,26 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
               btn_icon: Icon(
                 Icons.gps_fixed,
                 color: Colors.blue,
+              ),
+            ),
+          ),
+          Positioned(
+            width: 60,
+            height: 60,
+            bottom: 100,
+            right: 17,
+            child: RoundButton(
+              btn_color: Colors.black,
+              onPressed: () {
+                setState(() {
+                  pos = polylineCoordinates[i];
+                  i++;
+                  print("I = $i");
+                });
+              },
+              btn_icon: Icon(
+                Icons.brightness_1,
+                color: Colors.white,
               ),
             ),
           )
@@ -380,27 +473,39 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
     newGoogleMapController
         .animateCamera(CameraUpdate.newLatLngBounds(bounds, 70));
 
-    Marker pickupMarker = Marker(
-      markerId: MarkerId('pickup'),
-      position: pickLatLng,
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-      infoWindow: InfoWindow(title: pickup.placeName, snippet: 'My Location'),
-    );
+    // Marker pickupMarker = Marker(
+    //   markerId: MarkerId('pickup'),
+    //   position: pickLatLng,
+    //   icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+    //   infoWindow: InfoWindow(title: pickup.placeName, snippet: 'My Location'),
+    // );
 
-    Marker destinationMarker = Marker(
-      markerId: MarkerId('destination'),
-      position: destinationLatLng,
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-      infoWindow:
-          InfoWindow(title: destination.placeName, snippet: 'Destination'),
-    );
+    // var carLatLng = LatLng(
+    //     polylineCoordinates[i].latitude, polylineCoordinates[i].longitude);
+    // print('Coordinates : $carLatLng');
+    // print("Polyline Coordinates : $polylineCoordinates");
+    setState(() {
+      Marker car = Marker(
+          markerId: MarkerId('car'),
+          position: pos,
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed));
+      _markers.add(car);
+    });
 
-    setState(
-      () {
-        _markers.add(pickupMarker);
-        _markers.add(destinationMarker);
-      },
-    );
+    // Marker destinationMarker = Marker(
+    //   markerId: MarkerId('destination'),
+    //   position: destinationLatLng,
+    //   icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+    //   infoWindow:
+    //       InfoWindow(title: destination.placeName, snippet: 'Destination'),
+    // );
+
+    // setState(
+    //   () {
+    //     _markers.add(pickupMarker);
+    //     _markers.add(destinationMarker);
+    //   },
+    // );
 
     Circle pickupCircle = Circle(
       circleId: CircleId('pickup'),
@@ -426,10 +531,5 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
         _circles.add(destinationCircle);
       },
     );
-  }
-
-  Future<void> _currentPos() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_currentpos));
   }
 }
