@@ -32,9 +32,10 @@ class AmbulanceMap extends StatefulWidget {
 }
 
 class _AmbulanceMapState extends State<AmbulanceMap> {
+  int i = 0;
   void initState() {
     super.initState();
-    getCurrentLocation();
+    // getCurrentLocation();
 
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
@@ -44,14 +45,14 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
     // Navigator.of(context).pop();
   }
 
-  void getCurrentLocation() async {
-    GetLocation location = GetLocation();
-    await location.getLocation();
-    setState(() {
-      latitude = location.latitude;
-      longitude = location.longitude;
-    });
-  }
+  // void getCurrentLocation() async {
+  //   GetLocation location = GetLocation();
+  //   await location.getLocation();
+  //   setState(() {
+  //     latitude = location.latitude;
+  //     longitude = location.longitude;
+  //   });
+  // }
 
   Completer<GoogleMapController> _controller = Completer();
   GoogleMapController newGoogleMapController;
@@ -64,6 +65,7 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
 
   Position currentPosition;
   var geolocator = Geolocator();
+  LatLng pos;
 
   void setupPositionLocator() async {
     Position position = await Geolocator.getCurrentPosition(
@@ -268,6 +270,35 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
                 color: Colors.blue,
               ),
             ),
+          ),
+          Positioned(
+            width: 60,
+            height: 60,
+            bottom: 100,
+            right: 17,
+            child: RoundButton(
+              btn_color: Colors.black,
+              onPressed: () {
+                setState(() {
+                  if (i < polylineCoordinates.length) {
+                    pos = polylineCoordinates[i];
+                    i++;
+                    print(pos);
+                    print("I = $i");
+                    Marker newCar = Marker(
+                        markerId: MarkerId('bus'),
+                        position: pos,
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueRose));
+                    _markers.add(newCar);
+                  }
+                });
+              },
+              btn_icon: Icon(
+                Icons.brightness_1,
+                color: Colors.white,
+              ),
+            ),
           )
         ],
       ),
@@ -390,12 +421,12 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
     newGoogleMapController
         .animateCamera(CameraUpdate.newLatLngBounds(bounds, 70));
 
-    Marker pickupMarker = Marker(
-      markerId: MarkerId('pickup'),
-      position: pickLatLng,
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-      infoWindow: InfoWindow(title: pickup.placeName, snippet: 'My Location'),
-    );
+    // Marker pickupMarker = Marker(
+    //   markerId: MarkerId('pickup'),
+    //   position: pickLatLng,
+    //   icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+    //   infoWindow: InfoWindow(title: pickup.placeName, snippet: 'My Location'),
+    // );
 
     Marker destinationMarker = Marker(
       markerId: MarkerId('destination'),
@@ -407,8 +438,14 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
 
     setState(
       () {
-        _markers.add(pickupMarker);
+        // _markers.add(pickupMarker);
         _markers.add(destinationMarker);
+        Marker car = Marker(
+            markerId: MarkerId('car'),
+            position: pos,
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed));
+        _markers.add(car);
       },
     );
 
