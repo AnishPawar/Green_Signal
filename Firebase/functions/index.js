@@ -6,7 +6,7 @@ admin.initializeApp(functions.config().firebase);
 var msgData;
 var childNode;
 
-exports.pleaseWorkForGodsSakelol1 = functions.firestore.document(
+exports.ambulanceNotifier = functions.firestore.document(
     "Active_Ambulance/{ambulancdID}"
 ).onCreate((snapshot, context) => {
     msgData = snapshot.data();
@@ -41,8 +41,8 @@ exports.pleaseWorkForGodsSakelol1 = functions.firestore.document(
 				}	
             }
 			var message = {
-				notification:{title:"Duh!",
-				body:"Ambulance is cominggg make way dude!"},
+				notification:{title:"Ambulance!",
+				body:"An Ambulance is coming your way.Please clear the path"},
 				data: {
 				  score: '850',
 				  time: '2:45'
