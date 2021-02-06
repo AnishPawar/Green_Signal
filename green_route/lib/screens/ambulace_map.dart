@@ -8,6 +8,9 @@ import 'package:green_route/provider/google_signin.dart';
 import 'package:green_route/screens/ambulance_signup.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:provider/provider.dart';
 import 'package:green_route/services/location.dart';
 import '../buttons/round_button.dart';
@@ -121,6 +124,30 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
               child: Text(
                 'No',
                 style: TextStyle(color: Colors.lightBlue, fontSize: 18),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> popNotif() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Ambulance is on the way'),
+          content: Text('Please make way!!'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Ok',
+                style: TextStyle(color: Colors.red, fontSize: 18),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -283,21 +310,34 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
                 setState(() {
                   if (i < polylineCoordinates.length) {
                     pos = polylineCoordinates[i];
-                    double current_lat = pos.latitude;
-                    double current_long = pos.longitude;
-                    DatabaseService(uid: uid)
-                        .updateAmbulanceData(current_lat, current_long, [], []);
 
                     i++;
                     print(pos);
                     print("I = $i");
-                    Marker newCar = Marker(
-                        markerId: MarkerId('bus'),
+                    Marker newCar1 = Marker(
+                        markerId: MarkerId('bus3'),
                         position: pos,
                         icon: BitmapDescriptor.defaultMarkerWithHue(
                             BitmapDescriptor.hueRose));
-                    _markers.add(newCar);
+                    _markers.add(newCar1);
                   }
+                });
+
+                setState(() async {
+                  double current_lat = pos.latitude;
+                  double current_long = pos.longitude;
+
+                  var new_val = await FirebaseFirestore.instance
+                      .collection("Active_Ambulance")
+                      .doc(uid)
+                      .get()
+                      .then((DocumentSnapshot documentSnapshot) {
+                    List pathPoints = documentSnapshot.data()['Path_Points'];
+                    List child_nodes = documentSnapshot.data()['Child_Nodes'];
+                    return [pathPoints, child_nodes];
+                  });
+                  DatabaseService(uid: uid).updateAmbulanceData(
+                      current_lat, current_long, new_val[0], new_val[1]);
                 });
               },
               btn_icon: Icon(

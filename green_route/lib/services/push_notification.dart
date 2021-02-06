@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
+import 'package:green_route/screens/ambulace_map.dart';
 
 String token = '';
 
@@ -44,7 +45,9 @@ class PushNotificationsManager {
           //     )
           //   ],
           // );
+          // popNotif();
           playsound(counter);
+
           if (counter <= 2) {
             counter++;
           } else {
