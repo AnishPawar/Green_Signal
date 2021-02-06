@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
           // SignInPage.id: (context) => SignInPage()
           AmbulanceSignUp.id: (context) => AmbulanceSignUp(provider: null),
           LandingScreen.id: (context) => LandingScreen(),
-          NodeIdentify.id: (context) => NodeIdentify()
+          // NodeIdentify.id: (context) => NodeIdentify()
         },
       ),
     );

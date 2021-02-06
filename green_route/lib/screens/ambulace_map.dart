@@ -40,6 +40,8 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
     final User user = auth.currentUser;
     final uid = user.uid;
     DatabaseService(uid: uid).updateUserData(true, latitude, longitude, '');
+
+    // Navigator.of(context).pop();
   }
 
   void getCurrentLocation() async {
@@ -94,7 +96,7 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
+      builder: (context) {
         return AlertDialog(
           title: Text('Create a Green Corridor?'),
           content: Text(
@@ -107,7 +109,9 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
               ),
               onPressed: () {
                 // Navigator.of(context).pop();
-                Navigator.pushNamed(context, NodeIdentify.id);
+                // Navigator.pushNamed(context, NodeIdentify.id);
+                streamReturn();
+                Navigator.of(context).pop();
               },
             ),
             FlatButton(
