@@ -95,25 +95,25 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
-        return CupertinoAlertDialog(
+        return AlertDialog(
           title: Text('Create a Green Corridor?'),
           content: Text(
               'A faster route will be created for Ambulance. Use only in case of Emergency!'),
           actions: <Widget>[
-            CupertinoDialogAction(
+            FlatButton(
               child: Text(
                 'Yes',
-                style: TextStyle(color: Colors.red),
+                style: TextStyle(color: Colors.red, fontSize: 18),
               ),
               onPressed: () {
                 // Navigator.of(context).pop();
                 Navigator.pushNamed(context, NodeIdentify.id);
               },
             ),
-            CupertinoDialogAction(
+            FlatButton(
               child: Text(
                 'No',
-                style: TextStyle(color: Colors.lightBlue),
+                style: TextStyle(color: Colors.lightBlue, fontSize: 18),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
