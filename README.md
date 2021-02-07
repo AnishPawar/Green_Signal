@@ -1,2 +1,6 @@
 # Green_Signal
-Kindly Checkout the branches for current status of the project
+## ELectrothon 3.0 Submission of Team Glasses.
+
+## Project Name Green Route
+
+Main Branch Contains the updated code
