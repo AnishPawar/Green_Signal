@@ -8,7 +8,9 @@ import 'package:green_route/screens/ambulace_map.dart';
 
 String token = '';
 
-int counter = 1;
+int counter_1 = 1;
+int counter_2 = 1;
+int counter_3 = 1;
 
 void playsound() {
   final player = AudioCache();
@@ -47,11 +49,9 @@ class PushNotificationsManager {
           // );
           // popNotif();
 
-          if (counter < 2) {
+          if (counter_1 == 1) {
             playsound();
-            counter++;
-          } else {
-            // counter = 0;
+            counter_1++;
           }
 
           // _showItemDialog(message);
@@ -59,21 +59,17 @@ class PushNotificationsManager {
         onLaunch: (Map<String, dynamic> message) async {
           print("onLaunch: $message");
 
-          if (counter < 2) {
+          if (counter_2 == 1) {
             playsound();
-            counter++;
-          } else {
-            // counter = 0;
+            counter_2++;
           }
         },
         onResume: (Map<String, dynamic> message) async {
           print("onResume: $message");
 
-          if (counter < 2) {
+          if (counter_3 == 1) {
             playsound();
-            counter++;
-          } else {
-            // counter = 0;
+            counter_3++;
           }
         },
       );
