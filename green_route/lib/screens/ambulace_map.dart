@@ -78,7 +78,7 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
 
   void setCustomMarker() async {
     mapMarker = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(), 'images/carresize.png');
+        ImageConfiguration(), 'images/car_icon2.png');
   }
 
   void setupPositionLocator() async {
