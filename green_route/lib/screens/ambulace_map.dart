@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:green_route/services/BishList.dart';
@@ -66,6 +68,10 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
   Position currentPosition;
   var geolocator = Geolocator();
   LatLng pos;
+
+  Future sleep() {
+    return new Future.delayed(Duration(seconds: 1));
+  }
 
   void setupPositionLocator() async {
     Position position = await Geolocator.getCurrentPosition(
@@ -288,33 +294,36 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
             child: RoundButton(
               btn_color: Colors.black,
               onPressed: () async {
-                setState(() {
-                  if (i < polylineCoordinates.length) {
-                    pos = polylineCoordinates[i];
-                    i++;
-                    print(pos);
-                    print("I = $i");
-                    Marker newCar1 = Marker(
-                        markerId: MarkerId('bus3'),
-                        position: pos,
-                        icon: BitmapDescriptor.defaultMarkerWithHue(
-                            BitmapDescriptor.hueRose));
-                    _markers.add(newCar1);
-                  }
-                });
-                double current_lat = pos.latitude;
-                double current_long = pos.longitude;
-                var new_val = await FirebaseFirestore.instance
-                    .collection("Active_Ambulance")
-                    .doc(uid)
-                    .get()
-                    .then((DocumentSnapshot documentSnapshot) {
-                  List pathPoints = documentSnapshot.data()['Path_Points'];
-                  List child_nodes = documentSnapshot.data()['Child_Nodes'];
-                  return [pathPoints, child_nodes];
-                });
-                DatabaseService(uid: uid).updateAmbulanceData(
-                    current_lat, current_long, new_val[0], new_val[1]);
+                while (i < polylineCoordinates.length) {
+                  setState(() {
+                    if (i < polylineCoordinates.length) {
+                      pos = polylineCoordinates[i];
+                      i++;
+                      print(pos);
+                      print("I = $i");
+                      Marker newCar1 = Marker(
+                          markerId: MarkerId('bus3'),
+                          position: pos,
+                          icon: BitmapDescriptor.defaultMarkerWithHue(
+                              BitmapDescriptor.hueRose));
+                      _markers.add(newCar1);
+                    }
+                  });
+                  double current_lat = pos.latitude;
+                  double current_long = pos.longitude;
+                  var new_val = await FirebaseFirestore.instance
+                      .collection("Active_Ambulance")
+                      .doc(uid)
+                      .get()
+                      .then((DocumentSnapshot documentSnapshot) {
+                    List pathPoints = documentSnapshot.data()['Path_Points'];
+                    List child_nodes = documentSnapshot.data()['Child_Nodes'];
+                    return [pathPoints, child_nodes];
+                  });
+                  DatabaseService(uid: uid).updateAmbulanceData(
+                      current_lat, current_long, new_val[0], new_val[1]);
+                  sleep();
+                }
               },
               btn_icon: Icon(
                 Icons.brightness_1,
