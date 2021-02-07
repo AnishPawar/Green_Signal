@@ -1,5 +1,5 @@
 # Green_Signal
-## ELectrothon 3.0 Submission of Team Glasses.
+## Electrothon 3.0 Submission of Team Glasses.
 
 ## Project Name Green Route
 
