@@ -8,11 +8,11 @@ import 'package:green_route/screens/ambulace_map.dart';
 
 String token = '';
 
-int counter = 1;
+int counter = 0;
 
-void playsound(int audio_number) {
+void playsound() {
   final player = AudioCache();
-  player.play("Amb_$audio_number.wav");
+  player.play("Amb_1.wav");
 }
 
 class PushNotificationsManager {
@@ -46,9 +46,9 @@ class PushNotificationsManager {
           //   ],
           // );
           // popNotif();
-          playsound(counter);
 
-          if (counter <= 2) {
+          if (counter < 2) {
+            playsound();
             counter++;
           } else {
             counter = 0;
@@ -58,8 +58,9 @@ class PushNotificationsManager {
         },
         onLaunch: (Map<String, dynamic> message) async {
           print("onLaunch: $message");
-          playsound(counter);
-          if (counter <= 2) {
+
+          if (counter < 2) {
+            playsound();
             counter++;
           } else {
             counter = 0;
@@ -67,8 +68,9 @@ class PushNotificationsManager {
         },
         onResume: (Map<String, dynamic> message) async {
           print("onResume: $message");
-          playsound(counter);
-          if (counter <= 2) {
+
+          if (counter < 2) {
+            playsound();
             counter++;
           } else {
             counter = 0;

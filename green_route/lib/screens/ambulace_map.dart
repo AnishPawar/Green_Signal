@@ -38,6 +38,7 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
   void initState() {
     super.initState();
     // getCurrentLocation();
+    setCustomMarker();
 
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
@@ -60,6 +61,8 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
   GoogleMapController newGoogleMapController;
   double mapBottomPadding = 0;
 
+  BitmapDescriptor mapMarker;
+
   List<LatLng> polylineCoordinates = [];
   Set<Polyline> _polylines = {};
   Set<Marker> _markers = {};
@@ -71,6 +74,11 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
 
   Future sleep() {
     return new Future.delayed(Duration(seconds: 1));
+  }
+
+  void setCustomMarker() async {
+    mapMarker = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(), 'images/carresize.png');
   }
 
   void setupPositionLocator() async {
@@ -302,10 +310,10 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
                       print(pos);
                       print("I = $i");
                       Marker newCar1 = Marker(
-                          markerId: MarkerId('bus3'),
-                          position: pos,
-                          icon: BitmapDescriptor.defaultMarkerWithHue(
-                              BitmapDescriptor.hueRose));
+                        markerId: MarkerId('bus3'),
+                        position: pos,
+                        icon: mapMarker,
+                      );
                       _markers.add(newCar1);
                     }
                   });
