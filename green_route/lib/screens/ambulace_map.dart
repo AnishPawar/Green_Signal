@@ -1,18 +1,14 @@
-import 'package:green_route/buttons/floating_searchbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:green_route/services/BishList.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:green_route/buttons/round_button.dart';
 import 'package:green_route/provider/google_signin.dart';
-import 'package:green_route/screens/ambulance_signup.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:provider/provider.dart';
-import 'package:green_route/services/location.dart';
 import '../buttons/round_button.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:green_route/helpers/helpermethods.dart';
@@ -268,21 +264,6 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
               ),
             ),
           ),
-          // Positioned(
-          //   width: 60,
-          //   height: 60,
-          //   bottom: 95,
-          //   left: 17,
-          //   child: RoundButton(
-          //     btn_color: Colors.blue,
-          //     onPressed: () {},
-          //     btn_icon: Icon(
-          //       Icons.drive_eta,
-          //       color: Colors.white,
-          //       size: 30,
-          //     ),
-          //   ),
-          // ),
           Positioned(
             width: 60,
             height: 60,
@@ -306,11 +287,10 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
             right: 17,
             child: RoundButton(
               btn_color: Colors.black,
-              onPressed: () {
+              onPressed: () async {
                 setState(() {
                   if (i < polylineCoordinates.length) {
                     pos = polylineCoordinates[i];
-
                     i++;
                     print(pos);
                     print("I = $i");
@@ -322,23 +302,19 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
                     _markers.add(newCar1);
                   }
                 });
-
-                setState(() async {
-                  double current_lat = pos.latitude;
-                  double current_long = pos.longitude;
-
-                  var new_val = await FirebaseFirestore.instance
-                      .collection("Active_Ambulance")
-                      .doc(uid)
-                      .get()
-                      .then((DocumentSnapshot documentSnapshot) {
-                    List pathPoints = documentSnapshot.data()['Path_Points'];
-                    List child_nodes = documentSnapshot.data()['Child_Nodes'];
-                    return [pathPoints, child_nodes];
-                  });
-                  DatabaseService(uid: uid).updateAmbulanceData(
-                      current_lat, current_long, new_val[0], new_val[1]);
+                double current_lat = pos.latitude;
+                double current_long = pos.longitude;
+                var new_val = await FirebaseFirestore.instance
+                    .collection("Active_Ambulance")
+                    .doc(uid)
+                    .get()
+                    .then((DocumentSnapshot documentSnapshot) {
+                  List pathPoints = documentSnapshot.data()['Path_Points'];
+                  List child_nodes = documentSnapshot.data()['Child_Nodes'];
+                  return [pathPoints, child_nodes];
                 });
+                DatabaseService(uid: uid).updateAmbulanceData(
+                    current_lat, current_long, new_val[0], new_val[1]);
               },
               btn_icon: Icon(
                 Icons.brightness_1,
