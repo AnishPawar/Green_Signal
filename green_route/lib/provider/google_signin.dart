@@ -38,7 +38,7 @@ class GoogleSignInProvider extends ChangeNotifier {
       final FirebaseAuth auth = FirebaseAuth.instance;
       final User usert = auth.currentUser;
       final uid = usert.uid;
-      DatabaseService(uid: uid).updateUserData(false, 0.000, 0.0000);
+      DatabaseService(uid: uid).updateUserData(false, 0.000, 0.0000, '');
 
       isSigningIn = false;
     }

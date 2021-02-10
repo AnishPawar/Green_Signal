@@ -54,7 +54,14 @@ dependencies:
   brand_colors: ^0.0.3
   flutter_polyline_points: ^0.2.4
   firebase_messaging: 
+<<<<<<< HEAD
   flutter_animarker: ^0.1.1+1
+=======
+
+  audioplayers: ^0.17.3
+
+
+>>>>>>> main
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +81,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/
+    - assets/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,16 +1,22 @@
+<<<<<<< HEAD
 import 'package:flutter_animarker/lat_lng_interpolation.dart';
 import 'package:flutter_animarker/models/lat_lng_delta.dart';
 import 'package:green_route/buttons/floating_searchbar.dart';
+=======
+import 'dart:io';
+
+>>>>>>> main
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:green_route/services/BishList.dart';
 import 'package:green_route/buttons/round_button.dart';
 import 'package:green_route/provider/google_signin.dart';
-import 'package:green_route/screens/ambulance_signup.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:provider/provider.dart';
-import 'package:green_route/services/location.dart';
 import '../buttons/round_button.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:green_route/helpers/helpermethods.dart';
@@ -21,6 +27,8 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:green_route/services/database.dart';
+import 'package:green_route/services/Node_identify.dart';
+import 'package:green_route/models/ambulance_class.dart';
 
 double latitude = 19.079790;
 double longitude = 72.904050;
@@ -49,10 +57,15 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
   void initState() {
     super.initState();
     // getCurrentLocation();
+<<<<<<< HEAD
+=======
+    setCustomMarker();
+>>>>>>> main
 
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
     final uid = user.uid;
+<<<<<<< HEAD
     DatabaseService(uid: uid).updateUserData(true, latitude, longitude);
 
     // subscription =
@@ -84,23 +97,33 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
 
     // super.initState();
   }
+=======
+    DatabaseService(uid: uid).updateUserData(true, latitude, longitude, '');
+>>>>>>> main
 
-  void getCurrentLocation() async {
-    GetLocation location = GetLocation();
-    await location.getLocation();
-    setState(() {
-      latitude = location.latitude;
-      longitude = location.longitude;
-    });
+    // Navigator.of(context).pop();
   }
+
+  // void getCurrentLocation() async {
+  //   GetLocation location = GetLocation();
+  //   await location.getLocation();
+  //   setState(() {
+  //     latitude = location.latitude;
+  //     longitude = location.longitude;
+  //   });
+  // }
 
   Completer<GoogleMapController> _controller = Completer();
   GoogleMapController newGoogleMapController;
   double mapBottomPadding = 0;
 
+<<<<<<< HEAD
   LatLngInterpolationStream _latLngStream =
       LatLngInterpolationStream(movementDuration: Duration(seconds: 5));
   StreamSubscription<LatLngDelta> subscription;
+=======
+  BitmapDescriptor mapMarker;
+>>>>>>> main
 
   List<LatLng> polylineCoordinates = [];
   Set<Polyline> _polylines = {};
@@ -110,13 +133,29 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
   Position currentPosition;
   LatLng pos;
   var geolocator = Geolocator();
+  LatLng pos;
+
+  Future sleep() {
+    return new Future.delayed(Duration(seconds: 1));
+  }
+
+  void setCustomMarker() async {
+    mapMarker = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(), 'images/car_icon2.png');
+  }
 
   void setupPositionLocator() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.bestForNavigation);
     currentPosition = position;
 
+<<<<<<< HEAD
     pos = LatLng(position.latitude, position.longitude);
+=======
+    getLocationHelper(position);
+
+    LatLng pos = LatLng(position.latitude, position.longitude);
+>>>>>>> main
     CameraPosition cp = new CameraPosition(target: pos, zoom: 14);
     newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(cp));
     String address =
@@ -138,25 +177,52 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
+      builder: (context) {
+        return AlertDialog(
           title: Text('Create a Green Corridor?'),
           content: Text(
               'A faster route will be created for Ambulance. Use only in case of Emergency!'),
           actions: <Widget>[
-            CupertinoDialogAction(
+            FlatButton(
               child: Text(
                 'Yes',
-                style: TextStyle(color: Colors.red),
+                style: TextStyle(color: Colors.red, fontSize: 18),
+              ),
+              onPressed: () {
+                // Navigator.of(context).pop();
+                // Navigator.pushNamed(context, NodeIdentify.id);
+                streamReturn();
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text(
+                'No',
+                style: TextStyle(color: Colors.lightBlue, fontSize: 18),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            CupertinoDialogAction(
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> popNotif() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Ambulance is on the way'),
+          content: Text('Please make way!!'),
+          actions: <Widget>[
+            FlatButton(
               child: Text(
-                'No',
-                style: TextStyle(color: Colors.lightBlue),
+                'Ok',
+                style: TextStyle(color: Colors.red, fontSize: 18),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -302,21 +368,6 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
               ),
             ),
           ),
-          // Positioned(
-          //   width: 60,
-          //   height: 60,
-          //   bottom: 95,
-          //   left: 17,
-          //   child: RoundButton(
-          //     btn_color: Colors.blue,
-          //     onPressed: () {},
-          //     btn_icon: Icon(
-          //       Icons.drive_eta,
-          //       color: Colors.white,
-          //       size: 30,
-          //     ),
-          //   ),
-          // ),
           Positioned(
             width: 60,
             height: 60,
@@ -340,6 +391,7 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
             right: 17,
             child: RoundButton(
               btn_color: Colors.black,
+<<<<<<< HEAD
               onPressed: () {
                 setState(() {
                   pos = polylineCoordinates[i];
@@ -353,6 +405,39 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
                           BitmapDescriptor.hueRose));
                   _markers.add(newCar);
                 });
+=======
+              onPressed: () async {
+                while (i < polylineCoordinates.length) {
+                  setState(() {
+                    if (i < polylineCoordinates.length) {
+                      pos = polylineCoordinates[i];
+                      i++;
+                      print(pos);
+                      print("I = $i");
+                      Marker newCar1 = Marker(
+                        markerId: MarkerId('bus3'),
+                        position: pos,
+                        icon: mapMarker,
+                      );
+                      _markers.add(newCar1);
+                    }
+                  });
+                  double current_lat = pos.latitude;
+                  double current_long = pos.longitude;
+                  var new_val = await FirebaseFirestore.instance
+                      .collection("Active_Ambulance")
+                      .doc(uid)
+                      .get()
+                      .then((DocumentSnapshot documentSnapshot) {
+                    List pathPoints = documentSnapshot.data()['Path_Points'];
+                    List child_nodes = documentSnapshot.data()['Child_Nodes'];
+                    return [pathPoints, child_nodes];
+                  });
+                  DatabaseService(uid: uid).updateAmbulanceData(
+                      current_lat, current_long, new_val[0], new_val[1]);
+                  sleep();
+                }
+>>>>>>> main
               },
               btn_icon: Icon(
                 Icons.brightness_1,
@@ -436,6 +521,7 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
     PolylinePoints polylinePoints = PolylinePoints();
     List<PointLatLng> results =
         polylinePoints.decodePolyline(thisDetails.encodedPoints);
+    getPathPoints(results);
     polylineCoordinates.clear();
     if (results.isNotEmpty) {
       results.forEach((PointLatLng point) {
@@ -487,6 +573,7 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
     //   infoWindow: InfoWindow(title: pickup.placeName, snippet: 'My Location'),
     // );
 
+<<<<<<< HEAD
     // var carLatLng = LatLng(
     //     polylineCoordinates[i].latitude, polylineCoordinates[i].longitude);
     // print('Coordinates : $carLatLng');
@@ -513,6 +600,28 @@ class _AmbulanceMapState extends State<AmbulanceMap> {
     //     _markers.add(destinationMarker);
     //   },
     // );
+=======
+    Marker destinationMarker = Marker(
+      markerId: MarkerId('destination'),
+      position: destinationLatLng,
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+      infoWindow:
+          InfoWindow(title: destination.placeName, snippet: 'Destination'),
+    );
+
+    setState(
+      () {
+        // _markers.add(pickupMarker);
+        _markers.add(destinationMarker);
+        Marker car = Marker(
+            markerId: MarkerId('car'),
+            position: pos,
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed));
+        _markers.add(car);
+      },
+    );
+>>>>>>> main
 
     Circle pickupCircle = Circle(
       circleId: CircleId('pickup'),

@@ -24,6 +24,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:green_route/services/database.dart';
 import 'package:green_route/services/location.dart';
 import 'package:green_route/services/push_notification.dart';
+// import 'package:green_route/models/ambulance_class.dart';
 
 double latitude = 19.079790;
 double longitude = 72.904050;
@@ -44,8 +45,8 @@ class _MainMapState extends State<MainMap> {
     final uid = usert.uid;
 
     String token = await pushNotificationService.init();
-    DatabaseService(uid: uid).updateUserToken(token);
-
+    // DatabaseService(uid: uid).updateUserToken(token);
+    DatabaseService(uid: uid).updateUserData(false, latitude, longitude, token);
     return token;
   }
 
@@ -56,8 +57,6 @@ class _MainMapState extends State<MainMap> {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User user = auth.currentUser;
     final uid = user.uid;
-    DatabaseService(uid: uid).updateUserData(false, latitude, longitude);
-
     notificationCall();
   }
 
@@ -196,21 +195,6 @@ class _MainMapState extends State<MainMap> {
               ),
             ),
           ),
-          // Positioned(
-          //   width: 60,
-          //   height: 60,
-          //   bottom: 30,
-          //   left: 17,
-          //   child: RoundButton(
-          //     btn_color: Colors.blue,
-          //     onPressed: () {},
-          //     btn_icon: Icon(
-          //       Icons.directions,
-          //       color: Colors.white,
-          //       size: 30,
-          //     ),
-          //   ),
-          // ),
           Positioned(
             width: 60,
             height: 60,
@@ -268,22 +252,6 @@ class _MainMapState extends State<MainMap> {
               ),
               title: Text('For Ambulance'),
               onTap: () {
-                // List pt_1 = [
-                //   (pi / 180) * (19.134061),
-                //   (pi / 180) * (72.910901)
-                // ];
-                // List pt_2 = [
-                //   (pi / 180) * (19.126275438939253),
-                //   (pi / 180) * (72.91820117092337)
-                // ];
-                // List user_pt = [
-                //   (pi / 180) * (19.15300),
-                //   (pi / 180) * (72.910901)
-                // ];
-
-                // bool new_1 = pathMatching(pt_1, pt_2, user_pt);
-                // print(new_1);
-
                 Navigator.pushNamed(context, AmbulanceSignUp.id);
               },
             ),
@@ -330,6 +298,7 @@ class _MainMapState extends State<MainMap> {
     PolylinePoints polylinePoints = PolylinePoints();
     List<PointLatLng> results =
         polylinePoints.decodePolyline(thisDetails.encodedPoints);
+    // print(results);
     polylineCoordinates.clear();
     if (results.isNotEmpty) {
       results.forEach((PointLatLng point) {
